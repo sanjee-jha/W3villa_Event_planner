@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Upcoming Events</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Upcoming Events</h1>
+        <div th:if="${error}" class="bg-red-100 text-red-700 p-4 mb-4 rounded">
+            <p th:text="${error}"></p>
+        </div>
+        <div th:if="${message}" class="bg-green-100 text-green-700 p-4 mb-4 rounded">
+            <p th:text="${message}"></p>
+        </div>
+        <div class="mb-4">
+            <div sec:authorize="hasAuthority('ADMIN')">
+                <a href="/events/admin/event/new" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Create New Event</a>
+            </div>
+            <div sec:authorize="isAuthenticated()">
+                <a href="/events/my-rsvps" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">My RSVPs</a>
+            </div>
+        </div>
+        <table class="w-full bg-white shadow rounded">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-2">Title</th>
+                    <th class="p-2">Date</th>
+                    <th class="p-2">Location</th>
+                    <th class="p-2">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="event : ${events}">
+                    <td class="p-2" th:text="${event.title}"></td>
+                    <td class="p-2" th:text="${event.startTime}"></td>
+                    <td class="p-2" th:text="${event.location}"></td>
+                    <td class="p-2">
+                        <a th:href="@{/events/event/{id}(id=${event.id})}" class="text-blue-500 hover:underline">View Details</a>
+                        <span sec:authorize="hasAuthority('ADMIN')">
+                            | <a th:href="@{/events/admin/event/edit/{id}(id=${event.id})}" class="text-yellow-500 hover:underline">Edit</a>
+                            | <form th:action="@{/events/admin/event/delete/{id}(id=${event.id})}" method="post" style="display:inline;">
+                                <button type="submit" onclick="return confirm('Are you sure you want to delete this event?')" class="text-red-500 hover:underline">Delete</button>
+                            </form>
+                        </span>
+                    </td>
+                </tr>
+                <tr th:if="${events.empty}">
+                    <td colspan="4" class="p-2 text-center">
+                        No upcoming events.
+                        <span sec:authorize="hasAuthority('ADMIN')">
+                            <a href="/events/admin/event/new" class="text-blue-500 hover:underline">Create one now</a>.
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

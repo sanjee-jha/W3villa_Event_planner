@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>RSVP Summary</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4" th:text="${event.title} + ' RSVP Summary'"></h1>
+        <div th:if="${error}" class="bg-red-100 text-red-700 p-4 mb-4 rounded">
+            <p th:text="${error}"></p>
+        </div>
+        <div class="bg-white p-4 shadow rounded mb-4">
+            <p><strong>Going:</strong> <span th:text="${going}"></span></p>
+            <p><strong>Maybe:</strong> <span th:text="${maybe}"></span></p>
+            <p><strong>Decline:</strong> <span th:text="${decline}"></span></p>
+        </div>
+        <table class="w-full bg-white shadow rounded">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-2">Username</th>
+                    <th class="p-2">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="rsvp : ${rsvps}">
+                    <td class="p-2" th:text="${rsvp.user.username}"></td>
+                    <td class="p-2" th:text="${rsvp.status}"></td>
+                </tr>
+                <tr th:if="${rsvps.empty}">
+                    <td colspan="2" class="p-2 text-center">No RSVPs yet.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="mt-4">
+            <a th:href="@{/events}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Back to Events</a>
+        </div>
+    </div>
+</body>
+</html>

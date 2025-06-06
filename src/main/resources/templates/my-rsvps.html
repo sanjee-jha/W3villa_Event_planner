@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My RSVPs</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">My RSVPs</h1>
+        <div th:if="${error}" class="bg-red-100 text-red-700 p-4 mb-4 rounded">
+            <p th:text="${error}"></p>
+        </div>
+        <table class="w-full bg-white shadow rounded">
+            <thead>
+                <tr class="bg-gray-200">
+                    <th class="p-2">Event</th>
+                    <th class="p-2">Status</th>
+                    <th class="p-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="rsvp : ${rsvps}">
+                    <td class="p-2" th:text="${rsvp.event.title}"></td>
+                    <td class="p-2" th:text="${rsvp.status}"></td>
+                    <td class="p-2">
+                        <form th:action="@{/events/event/{id}/rsvp(id=${rsvp.event.id})}" method="post" style="display:inline;">
+                            <select name="status" class="border p-1 rounded">
+                                <option value="GOING" th:selected="${rsvp.status == 'GOING'}">Going</option>
+                                <option value="MAYBE" th:selected="${rsvp.status == 'MAYBE'}">Maybe</option>
+                                <option value="DECLINE" th:selected="${rsvp.status == 'DECLINE'}">Decline</option>
+                            </select>
+                            <button type="submit" class="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">Update RSVP</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${rsvps.empty}">
+                    <td colspan="3" class="p-2 text-center">You haven't RSVP'd to any events.</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="mt-4">
+            <a th:href="@{/events}" class="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">Back to Events</a>
+        </div>
+    </div>
+</body>
+</html>
