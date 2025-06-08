@@ -3,6 +3,8 @@ package com.w3villa.eventplanner.model;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Data
@@ -26,4 +28,7 @@ public class Event {
 
     @Column(nullable = false)
     private String location;
+    
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RSVP> rsvps = new ArrayList<>();
 }
