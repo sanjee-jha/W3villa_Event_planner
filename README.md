@@ -105,3 +105,5 @@ RSVP
     RSVP submission logic
     Event creation and update by admin
 
+# Video:
+    https://drive.google.com/file/d/1C2-N2R006DRrwmgYEjzomgY1wdMIEo_b/view?usp=sharing
